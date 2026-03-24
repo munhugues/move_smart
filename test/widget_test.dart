@@ -1,30 +1,77 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:move_smart/main.dart';
+import 'package:move_smart/providers/app_providers.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  // Helper to get a fresh provider container each test
+  ProviderContainer make() {
+    final c = ProviderContainer();
+    addTearDown(c.dispose);
+    return c;
+  }
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  group('Nav index', () {
+    test('starts at 0', () {
+      expect(make().read(navIndexProvider), 0);
+    });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    test('setIndex changes tab', () {
+      final c = make();
+      c.read(navIndexProvider.notifier).setIndex(2);
+      expect(c.read(navIndexProvider), 2);
+    });
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  group('Search query', () {
+    test('starts empty', () {
+      expect(make().read(searchQueryProvider), '');
+    });
+
+    test('setQuery saves text', () {
+      final c = make();
+      c.read(searchQueryProvider.notifier).setQuery('Remera');
+      expect(c.read(searchQueryProvider), 'Remera');
+    });
+
+    test('clear resets to empty', () {
+      final c = make();
+      c.read(searchQueryProvider.notifier).setQuery('Kimironko');
+      c.read(searchQueryProvider.notifier).clear();
+      expect(c.read(searchQueryProvider), '');
+    });
+  });
+
+  group('Bottom nav bar', () {
+    // Build a simple nav bar widget for testing
+    Widget navBar({void Function(int)? onTap}) => MaterialApp(
+          home: Scaffold(
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              onTap: onTap,
+              items: const [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+                BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+                BottomNavigationBarItem(icon: Icon(Icons.confirmation_num), label: 'My Trips'),
+                BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+              ],
+            ),
+          ),
+        );
+
+    testWidgets('shows all 4 tabs', (t) async {
+      await t.pumpWidget(navBar());
+      expect(find.text('Home'), findsOneWidget);
+      expect(find.text('Search'), findsOneWidget);
+      expect(find.text('My Trips'), findsOneWidget);
+      expect(find.text('Settings'), findsOneWidget);
+    });
+
+    testWidgets('tapping Search fires index 1', (t) async {
+      int tapped = -1;
+      await t.pumpWidget(navBar(onTap: (i) => tapped = i));
+      await t.tap(find.text('Search'));
+      expect(tapped, 1);
+    });
   });
 }
