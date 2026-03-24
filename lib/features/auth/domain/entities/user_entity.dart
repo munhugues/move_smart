@@ -5,11 +5,13 @@ class UserEntity {
   final String email;
   final String fullName;
   final String? photoUrl;
+  final String? authToken;
 
   const UserEntity({
     required this.uid,
     required this.email,
     required this.fullName,
     this.photoUrl,
+    this.authToken,
   });
 }

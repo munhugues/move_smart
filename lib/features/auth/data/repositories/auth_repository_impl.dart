@@ -11,7 +11,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<({UserEntity? user, Failure? failure})> signInWithEmail({
-    required String email, required String password,
+    required String email,
+    required String password,
   }) async {
     try {
       final user = await remoteDataSource.signInWithEmail(email, password);
@@ -23,10 +24,13 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<({UserEntity? user, Failure? failure})> signUpWithEmail({
-    required String email, required String password, required String fullName,
+    required String email,
+    required String password,
+    required String fullName,
   }) async {
     try {
-      final user = await remoteDataSource.signUpWithEmail(email, password, fullName);
+      final user =
+          await remoteDataSource.signUpWithEmail(email, password, fullName);
       return (user: user, failure: null);
     } catch (e) {
       return (user: null, failure: AuthFailure(e.toString()));
@@ -37,6 +41,16 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<({UserEntity? user, Failure? failure})> signInWithGoogle() async {
     try {
       final user = await remoteDataSource.signInWithGoogle();
+      return (user: user, failure: null);
+    } catch (e) {
+      return (user: null, failure: AuthFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<({UserEntity? user, Failure? failure})> signInWithApple() async {
+    try {
+      final user = await remoteDataSource.signInWithApple();
       return (user: user, failure: null);
     } catch (e) {
       return (user: null, failure: AuthFailure(e.toString()));

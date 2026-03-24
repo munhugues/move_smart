@@ -17,6 +17,8 @@ abstract class AuthRepository {
 
   Future<({UserEntity? user, Failure? failure})> signInWithGoogle();
 
+  Future<({UserEntity? user, Failure? failure})> signInWithApple();
+
   Future<Failure?> signOut();
 
   UserEntity? get currentUser;

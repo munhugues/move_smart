@@ -8,23 +8,26 @@ class UserModel extends UserEntity {
     required super.email,
     required super.fullName,
     super.photoUrl,
+    super.authToken,
   });
 
   /// Convert Firestore document map → UserModel
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      uid:      map['uid']      as String,
-      email:    map['email']    as String,
+      uid: map['uid'] as String,
+      email: map['email'] as String,
       fullName: map['fullName'] as String,
       photoUrl: map['photoUrl'] as String?,
+      authToken: map['authToken'] as String?,
     );
   }
 
   /// Convert UserModel → Firestore document map
   Map<String, dynamic> toMap() => {
-    'uid':      uid,
-    'email':    email,
-    'fullName': fullName,
-    'photoUrl': photoUrl,
-  };
+        'uid': uid,
+        'email': email,
+        'fullName': fullName,
+        'photoUrl': photoUrl,
+        'authToken': authToken,
+      };
 }

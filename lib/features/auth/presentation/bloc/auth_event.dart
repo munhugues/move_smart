@@ -3,6 +3,8 @@ part of 'auth_bloc.dart';
 /// Events = things the USER does (inputs to the BLoC).
 sealed class AuthEvent {}
 
+class AuthStatusRequested extends AuthEvent {}
+
 class SignInWithEmailRequested extends AuthEvent {
   final String email;
   final String password;
@@ -21,5 +23,7 @@ class SignUpWithEmailRequested extends AuthEvent {
 }
 
 class SignInWithGoogleRequested extends AuthEvent {}
+
+class SignInWithAppleRequested extends AuthEvent {}
 
 class SignOutRequested extends AuthEvent {}
