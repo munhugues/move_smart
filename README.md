@@ -1,16 +1,53 @@
-# move_smart
+# Move Smart
 
-A new Flutter project.
+Move Smart is a Flutter app focused on reducing queue uncertainty in Kigali public transport by enabling trip and seat booking flows.
 
-## Getting Started
+## Member 1 Scope (Identity & Access)
 
-This project is a starting point for a Flutter application.
+Implemented:
 
-A few resources to get you started if this is your first Flutter project:
+- Welcome, Login, Signup, Profile, and Settings UI flow
+- Global authentication state gate (logged-in vs logged-out)
+- Auth methods:
+  - Email/Password
+  - Google sign-in
+  - Apple sign-in (iOS/macOS)
+- Firestore users collection sync on sign-in/sign-up
+- Local persistence (`SharedPreferences`) for:
+  - Login session info/token
+  - Language preference
+  - Dark mode preference
+- Unit tests for email/password validation logic
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Run Locally
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Install dependencies:
+
+	`flutter pub get`
+
+2. Run app:
+
+	`flutter run`
+
+## Firebase Setup
+
+This codebase includes Firebase auth datasource implementation.
+
+To fully enable production auth:
+
+1. Create Firebase project.
+2. Add Flutter apps (Android/iOS/Web/macOS as needed).
+3. Configure Firebase files/options for each platform.
+4. Enable providers in Firebase Authentication:
+	- Email/Password
+	- Google
+	- Apple (Apple Developer setup required)
+5. Create Firestore database (users collection will be created/updated automatically by app sign-in flows).
+
+If Firebase is not configured yet, the app falls back to a local demo auth datasource for UI flow testing.
+
+## Tests
+
+Run:
+
+`flutter test`
