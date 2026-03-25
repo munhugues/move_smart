@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'firebase_options.dart';
-import 'screens/main_nav.dart';
+import 'presentation/main_nav.dart';
 
 // App starts here — connect Firebase then launch the app
 void main() async {
