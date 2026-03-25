@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/bloc/app_settings_cubit.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../bloc/profile_bloc.dart';
-import '../widgets/preference_tile.dart';
+import '../../../profile/presentation/bloc/profile_bloc.dart';
+import '../../../profile/presentation/widgets/preference_tile.dart';
+import '../cubit/app_settings_cubit.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../services/prefs_service.dart';
+import '../../../../core/services/prefs_service.dart';
 
 class AppSettingsState {
   const AppSettingsState({

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'core/bloc/app_settings_cubit.dart';
 import 'core/constants/app_routes.dart';
 import 'core/services/prefs_service.dart';
 import 'core/theme/app_theme.dart';
@@ -22,7 +21,8 @@ import 'features/home/presentation/pages/home_page.dart';
 import 'features/profile/data/repositories/profile_repository_impl.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/profile/presentation/pages/profile_page.dart';
-import 'features/profile/presentation/pages/settings_page.dart';
+import 'features/settings/presentation/cubit/app_settings_cubit.dart';
+import 'features/settings/presentation/pages/settings_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
