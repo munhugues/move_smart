@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'core/constants/app_routes.dart';
@@ -18,12 +19,12 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/pages/auth_gate_page.dart';
 import 'features/auth/presentation/pages/login_page.dart';
 import 'features/auth/presentation/pages/sign_up_page.dart';
-// import 'features/home/presentation/pages/home_page.dart'; // Removed - teammate's version will be used
 import 'features/profile/data/repositories/profile_repository_impl.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/settings/presentation/cubit/app_settings_cubit.dart';
 import 'features/settings/presentation/pages/settings_page.dart';
+import 'presentation/main_nav.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +40,12 @@ void main() async {
     firebaseReady = false;
   }
 
-  runApp(MoveSmart(firebaseReady: firebaseReady));
+  runApp(
+    // ProviderScope wraps everything so Riverpod (booking) works inside
+    ProviderScope(
+      child: MoveSmart(firebaseReady: firebaseReady),
+    ),
+  );
 }
 
 class MoveSmart extends StatelessWidget {
@@ -90,7 +96,8 @@ class MoveSmart extends StatelessWidget {
               AppRoutes.splash: (_) => const AuthGatePage(),
               AppRoutes.login: (_) => const LoginPage(),
               AppRoutes.signUp: (_) => const SignUpPage(),
-              // AppRoutes.home: (_) => const HomePage(), // Removed - teammate's version will be used
+              // Booking home — MainNav is the booking team's bottom nav shell
+              AppRoutes.home: (_) => const MainNav(),
               AppRoutes.profile: (_) => const ProfilePage(),
               AppRoutes.settings: (_) => const SettingsPage(),
             },

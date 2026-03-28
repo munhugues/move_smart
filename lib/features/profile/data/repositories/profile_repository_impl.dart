@@ -21,7 +21,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
         pushNotificationsEnabled: _prefsService.pushNotificationsEnabled,
         darkModeEnabled: _prefsService.isDarkMode,
       );
-
       return (profile: profile, failure: null);
     } catch (e) {
       return (profile: null, failure: CacheFailure(e.toString()));
