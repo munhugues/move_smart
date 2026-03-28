@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../home/presentation/pages/home_page.dart';
+import '../../../../core/constants/app_routes.dart';
 import '../bloc/auth_bloc.dart';
 import 'welcome_page.dart';
 
@@ -11,25 +11,26 @@ class AuthGatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AuthBloc, AuthState>(
-      builder: (context, state) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
         if (state is AuthSuccess) {
-          return const HomePage();
+          Navigator.pushReplacementNamed(context, AppRoutes.home);
         }
-
-        if (state is AuthSignedOut || state is AuthFailureState) {
-          return const WelcomePage();
-        }
-
-        return const Scaffold(
-          backgroundColor: AppColors.background,
-          body: Center(
-            child: CircularProgressIndicator(
-              color: AppColors.primary,
-            ),
-          ),
-        );
       },
+      child: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is AuthSignedOut || state is AuthFailureState) {
+            return const WelcomePage();
+          }
+
+          return const Scaffold(
+            backgroundColor: AppColors.background,
+            body: Center(
+              child: CircularProgressIndicator(color: AppColors.primary),
+            ),
+          );
+        },
+      ),
     );
   }
 }

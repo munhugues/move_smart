@@ -17,8 +17,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
         fullName: _prefsService.savedName ?? 'Move Smart User',
         email: _prefsService.savedEmail ?? '',
         darkModeEnabled: _prefsService.isDarkMode,
+        pushNotificationsEnabled: _prefsService.pushNotificationsEnabled,
+        locationEnabled: _prefsService.locationEnabled,
       );
-
       return (profile: profile, failure: null);
     } catch (e) {
       return (profile: null, failure: CacheFailure(e.toString()));
@@ -33,7 +34,7 @@ class ProfileRepositoryImpl implements ProfileRepository {
         email: profile.email,
         name: profile.fullName,
       );
-      await _prefsService.setDarkMode(profile.darkModeEnabled);
+      await _saveAllPrefs(profile);
       return null;
     } catch (e) {
       return CacheFailure(e.toString());
@@ -43,10 +44,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Failure?> savePreferences(ProfileEntity profile) async {
     try {
-      await _prefsService.setDarkMode(profile.darkModeEnabled);
+      await _saveAllPrefs(profile);
       return null;
     } catch (e) {
       return CacheFailure(e.toString());
     }
+  }
+
+  Future<void> _saveAllPrefs(ProfileEntity profile) async {
+    await _prefsService.setDarkMode(profile.darkModeEnabled);
+    await _prefsService.setPushNotifications(profile.pushNotificationsEnabled);
+    await _prefsService.setLocation(profile.locationEnabled);
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'core/bloc/app_settings_cubit.dart';
@@ -18,11 +19,12 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/pages/auth_gate_page.dart';
 import 'features/auth/presentation/pages/login_page.dart';
 import 'features/auth/presentation/pages/sign_up_page.dart';
-import 'features/home/presentation/pages/home_page.dart';
 import 'features/profile/data/repositories/profile_repository_impl.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/profile/presentation/pages/profile_page.dart';
 import 'features/profile/presentation/pages/settings_page.dart';
+import 'presentation/main_nav.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,13 +32,20 @@ void main() async {
 
   var firebaseReady = false;
   try {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     firebaseReady = true;
   } catch (_) {
     firebaseReady = false;
   }
 
-  runApp(MoveSmart(firebaseReady: firebaseReady));
+  runApp(
+    // ProviderScope wraps everything so Riverpod (booking) works inside
+    ProviderScope(
+      child: MoveSmart(firebaseReady: firebaseReady),
+    ),
+  );
 }
 
 class MoveSmart extends StatelessWidget {
@@ -87,7 +96,8 @@ class MoveSmart extends StatelessWidget {
               AppRoutes.splash: (_) => const AuthGatePage(),
               AppRoutes.login: (_) => const LoginPage(),
               AppRoutes.signUp: (_) => const SignUpPage(),
-              AppRoutes.home: (_) => const HomePage(),
+              // Booking home — MainNav is the booking team's bottom nav shell
+              AppRoutes.home: (_) => const MainNav(),
               AppRoutes.profile: (_) => const ProfilePage(),
               AppRoutes.settings: (_) => const SettingsPage(),
             },

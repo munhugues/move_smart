@@ -20,12 +20,14 @@ class PrefsService {
   }
 
   // ── Key constants ─────────────────────────────────────────
-  static const _keyDarkMode = 'dark_mode';
-  static const _keyLanguage = 'language';
-  static const _keyAuthToken = 'auth_token';
-  static const _keyUserUid = 'user_uid';
-  static const _keyUserName = 'user_name';
-  static const _keyUserEmail = 'user_email';
+  static const _keyDarkMode      = 'dark_mode';
+  static const _keyLanguage      = 'language';
+  static const _keyAuthToken     = 'auth_token';
+  static const _keyUserUid       = 'user_uid';
+  static const _keyUserName      = 'user_name';
+  static const _keyUserEmail     = 'user_email';
+  static const _keyNotifications = 'push_notifications';
+  static const _keyLocation      = 'location_enabled';
 
   // ── Dark Mode ─────────────────────────────────────────────
 
@@ -43,6 +45,17 @@ class PrefsService {
   /// Save language preference
   Future<void> setLanguage(String langCode) =>
       _prefs.setString(_keyLanguage, langCode);
+
+  // ── Notifications ─────────────────────────────────────────
+  bool get pushNotificationsEnabled =>
+      _prefs.getBool(_keyNotifications) ?? false;
+  Future<void> setPushNotifications(bool value) =>
+      _prefs.setBool(_keyNotifications, value);
+
+  // ── Location ──────────────────────────────────────────────
+  bool get locationEnabled => _prefs.getBool(_keyLocation) ?? true;
+  Future<void> setLocation(bool value) =>
+      _prefs.setBool(_keyLocation, value);
 
   // ── Auth Token / Login state ──────────────────────────────
 

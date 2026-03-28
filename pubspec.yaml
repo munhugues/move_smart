@@ -10,15 +10,29 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # State management
   flutter_bloc: ^8.1.6
   bloc: ^8.1.4
+  flutter_riverpod: ^3.3.1
 
+  # Firebase
   firebase_core: ^3.13.0
   firebase_auth: ^5.5.2
   cloud_firestore: ^5.6.6
   google_sign_in: ^6.3.0
   sign_in_with_apple: ^6.1.4
 
+  # Map & Location
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+  geolocator: ^13.0.2
+  http: ^1.2.2
+
+  # UI helpers
+  table_calendar: ^3.1.2
+  intl: ^0.20.0
+
+  # Local storage & utils
   shared_preferences: ^2.3.2
   equatable: ^2.0.5
   get_it: ^8.0.2
