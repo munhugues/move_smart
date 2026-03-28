@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1080889566724',
     projectId: 'move-smart-d317e',
     storageBucket: 'move-smart-d317e.firebasestorage.app',
+    iosClientId: '1080889566724-eoi9e3s88qfijtg7ccq9qnhko4f3mq1v.apps.googleusercontent.com',
     iosBundleId: 'com.example.moveSmart',
   );
 
@@ -72,6 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1080889566724',
     projectId: 'move-smart-d317e',
     storageBucket: 'move-smart-d317e.firebasestorage.app',
+    iosClientId: '1080889566724-eoi9e3s88qfijtg7ccq9qnhko4f3mq1v.apps.googleusercontent.com',
     iosBundleId: 'com.example.moveSmart',
   );
 

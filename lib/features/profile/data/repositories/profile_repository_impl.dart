@@ -16,6 +16,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
         uid: uid,
         fullName: _prefsService.savedName ?? 'Move Smart User',
         email: _prefsService.savedEmail ?? '',
+        photoUrl: _prefsService.savedPhotoUrl,
+        locationEnabled: _prefsService.locationEnabled,
+        pushNotificationsEnabled: _prefsService.pushNotificationsEnabled,
         darkModeEnabled: _prefsService.isDarkMode,
       );
 
@@ -33,7 +36,11 @@ class ProfileRepositoryImpl implements ProfileRepository {
         email: profile.email,
         name: profile.fullName,
       );
+      await _prefsService.setProfilePhotoUrl(profile.photoUrl);
       await _prefsService.setDarkMode(profile.darkModeEnabled);
+      await _prefsService.setLocationEnabled(profile.locationEnabled);
+      await _prefsService
+          .setPushNotificationsEnabled(profile.pushNotificationsEnabled);
       return null;
     } catch (e) {
       return CacheFailure(e.toString());
@@ -44,6 +51,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Failure?> savePreferences(ProfileEntity profile) async {
     try {
       await _prefsService.setDarkMode(profile.darkModeEnabled);
+      await _prefsService.setLocationEnabled(profile.locationEnabled);
+      await _prefsService
+          .setPushNotificationsEnabled(profile.pushNotificationsEnabled);
       return null;
     } catch (e) {
       return CacheFailure(e.toString());

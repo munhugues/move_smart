@@ -1,27 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/bloc/app_settings_cubit.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../bloc/profile_bloc.dart';
-import '../widgets/preference_tile.dart';
+import '../../../../core/services/prefs_service.dart';
+import '../../../../core/widgets/app_overflow_menu.dart';
+import '../../../profile/presentation/bloc/profile_bloc.dart';
+import '../../../profile/presentation/widgets/preference_tile.dart';
+import '../cubit/app_settings_cubit.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final uid = PrefsService.instance.savedUid;
+      if (uid != null && uid.isNotEmpty) {
+        context.read<ProfileBloc>().add(LoadProfileRequested(uid));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         title: const Text(
           'Settings',
-          style: TextStyle(
-            color: AppColors.textDark,
-            fontWeight: FontWeight.w700,
-          ),
+          style: TextStyle(fontWeight: FontWeight.w700),
         ),
+        actions: const [AppOverflowMenu()],
       ),
       body: BlocBuilder<ProfileBloc, ProfileState>(
         builder: (context, profileState) {
@@ -62,10 +78,10 @@ class SettingsPage extends StatelessWidget {
                     onTap: () {},
                   ),
                   const SizedBox(height: 16),
-                  const _SectionTitle('Notifications'),
+                  const _SectionTitle('Preferences'),
                   PreferenceTile(
-                    title: 'Trip Reminders',
-                    icon: Icons.notifications_none_outlined,
+                    title: 'Push Notifications',
+                    icon: Icons.notifications_outlined,
                     trailing: Switch.adaptive(
                       value: profileState.profile.pushNotificationsEnabled,
                       onChanged: (value) {
@@ -76,8 +92,8 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                   PreferenceTile(
-                    title: 'Live Arrival Alerts',
-                    icon: Icons.directions_bus_outlined,
+                    title: 'Location',
+                    icon: Icons.location_on_outlined,
                     trailing: Switch.adaptive(
                       value: profileState.profile.locationEnabled,
                       onChanged: (value) {
@@ -88,8 +104,8 @@ class SettingsPage extends StatelessWidget {
                     ),
                   ),
                   PreferenceTile(
-                    title: 'Service Disruptions or Delays',
-                    icon: Icons.info_outline,
+                    title: 'Dark Mode',
+                    icon: Icons.dark_mode_outlined,
                     trailing: Switch.adaptive(
                       value: profileState.profile.darkModeEnabled,
                       onChanged: (value) {
@@ -101,18 +117,6 @@ class SettingsPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   const _SectionTitle('Privacy & Location'),
-                  PreferenceTile(
-                    title: 'Live Location Sharing',
-                    icon: Icons.location_on_outlined,
-                    trailing: Switch.adaptive(
-                      value: profileState.profile.locationEnabled,
-                      onChanged: (value) {
-                        context.read<ProfileBloc>().add(
-                              ToggleLocationRequested(value),
-                            );
-                      },
-                    ),
-                  ),
                   PreferenceTile(
                     title: 'Privacy Policy',
                     icon: Icons.shield_outlined,
@@ -186,14 +190,15 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 14,
-          color: AppColors.textDark,
+          color: theme.colorScheme.onSurface,
         ),
       ),
     );

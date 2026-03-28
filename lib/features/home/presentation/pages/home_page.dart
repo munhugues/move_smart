@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_routes.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/widgets/app_overflow_menu.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,26 +12,16 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         title: const Text(
-          '${AppStrings.tagline}',
+          AppStrings.tagline,
           style: TextStyle(
-            color: AppColors.textDark,
             fontWeight: FontWeight.w700,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () => Navigator.pushNamed(context, AppRoutes.profile),
-            icon: const Icon(Icons.person_outline),
-          ),
-          IconButton(
-            onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
-            icon: const Icon(Icons.settings_outlined),
-          ),
-        ],
+        actions: const [AppOverflowMenu()],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -47,21 +37,20 @@ class HomePage extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 24,
-                    color: AppColors.textDark,
                   ),
                 );
               },
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               AppStrings.subTagline,
-              style: TextStyle(color: AppColors.textGrey),
+              style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             const SizedBox(height: 18),
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(14),
               ),
               child: const Column(
@@ -98,12 +87,12 @@ class _InputHint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hintColor = Theme.of(context).colorScheme.onSurfaceVariant;
     return Row(
       children: [
-        const Icon(Icons.location_on_outlined,
-            color: AppColors.textGrey, size: 18),
+        Icon(Icons.location_on_outlined, color: hintColor, size: 18),
         const SizedBox(width: 8),
-        Text(label, style: const TextStyle(color: AppColors.textGrey)),
+        Text(label, style: TextStyle(color: hintColor)),
       ],
     );
   }

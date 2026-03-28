@@ -11,9 +11,9 @@ class AppTheme {
       seedColor: AppColors.primary,
       brightness: Brightness.light,
     ),
-    scaffoldBackgroundColor: AppColors.background,
+    scaffoldBackgroundColor: const Color(0xFFF0F4FF),
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.white,
+      backgroundColor: Color(0xFFF0F4FF),
       foregroundColor: AppColors.textDark,
       elevation: 0,
     ),
@@ -43,6 +43,16 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.primary,
       brightness: Brightness.dark,
+    ),
+    scaffoldBackgroundColor: const Color(0xFF12141A),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Color(0xFF12141A),
+      foregroundColor: Colors.white,
+      elevation: 0,
+    ),
+    cardTheme: CardThemeData(
+      color: const Color(0xFF1E222D),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     ),
   );
 }

@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/bloc/app_settings_cubit.dart';
+import '../../../settings/presentation/cubit/app_settings_cubit.dart';
 import '../../domain/entities/profile_entity.dart';
 import '../../domain/repositories/profile_repository.dart';
 
@@ -40,7 +40,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final failure = await profileRepository.updateProfile(event.profile);
     failure != null
         ? emit(ProfileError(failure.message))
-        : emit(ProfileUpdated(event.profile));
+      : emit(ProfileLoaded(event.profile));
   }
 
   Future<void> _onToggleDarkMode(

@@ -5,7 +5,9 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_routes.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/services/prefs_service.dart';
+import '../../../../core/widgets/app_overflow_menu.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../domain/entities/profile_entity.dart';
 import '../bloc/profile_bloc.dart';
 import '../widgets/preference_tile.dart';
 import '../widgets/profile_header.dart';
@@ -42,16 +44,14 @@ class _ProfilePageState extends State<ProfilePage> {
         }
       },
       child: Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: AppColors.background,
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           title: const Text(
             AppStrings.profile,
-            style: TextStyle(
-              color: AppColors.textDark,
-              fontWeight: FontWeight.w700,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w700),
           ),
+          actions: const [AppOverflowMenu()],
         ),
         body: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
@@ -81,7 +81,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     fullName: profile.fullName,
                     email: profile.email,
                     photoUrl: profile.photoUrl,
-                    onEdit: () {},
+                    onEdit: () => _showEditProfileDialog(context, profile),
+                    onChangePhoto: () =>
+                        _showChangePhotoDialog(context, profile),
                   ),
                   const SizedBox(height: 22),
                   const Text(
@@ -104,11 +106,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             );
                       },
                     ),
-                  ),
-                  PreferenceTile(
-                    title: AppStrings.bookingHistory,
-                    icon: Icons.history,
-                    onTap: () {},
                   ),
                   PreferenceTile(
                     title: AppStrings.pushNotifs,
@@ -153,7 +150,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   PreferenceTile(
                     title: AppStrings.helpCenter,
                     icon: Icons.help_outline,
-                    onTap: () {},
+                    onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Help Center coming soon.')),
+                    ),
                   ),
                   PreferenceTile(
                     title: AppStrings.logout,
@@ -168,5 +167,104 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _showEditProfileDialog(
+    BuildContext context,
+    ProfileEntity profile,
+  ) async {
+    final nameController = TextEditingController(text: profile.fullName);
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Edit Profile'),
+          content: TextField(
+            controller: nameController,
+            decoration: const InputDecoration(
+              labelText: 'Full Name',
+              hintText: 'Enter full name',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final updatedName = nameController.text.trim();
+                if (updatedName.isEmpty) return;
+
+                context.read<ProfileBloc>().add(
+                      UpdateProfileRequested(
+                        profile.copyWith(fullName: updatedName),
+                      ),
+                    );
+                Navigator.pop(context);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+
+    nameController.dispose();
+  }
+
+  Future<void> _showChangePhotoDialog(
+    BuildContext context,
+    ProfileEntity profile,
+  ) async {
+    final urlController = TextEditingController(text: profile.photoUrl ?? '');
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Change Profile Photo'),
+          content: TextField(
+            controller: urlController,
+            keyboardType: TextInputType.url,
+            decoration: const InputDecoration(
+              labelText: 'Photo URL',
+              hintText: 'https://...'
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                context.read<ProfileBloc>().add(
+                      UpdateProfileRequested(
+                        profile.copyWith(photoUrl: null),
+                      ),
+                    );
+                Navigator.pop(context);
+              },
+              child: const Text('Remove'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                context.read<ProfileBloc>().add(
+                      UpdateProfileRequested(
+                        profile.copyWith(photoUrl: urlController.text.trim()),
+                      ),
+                    );
+                Navigator.pop(context);
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+
+    urlController.dispose();
   }
 }

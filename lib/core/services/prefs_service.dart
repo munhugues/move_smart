@@ -26,6 +26,9 @@ class PrefsService {
   static const _keyUserUid = 'user_uid';
   static const _keyUserName = 'user_name';
   static const _keyUserEmail = 'user_email';
+  static const _keyUserPhoto = 'user_photo';
+  static const _keyLocationEnabled = 'location_enabled';
+  static const _keyPushNotificationsEnabled = 'push_notifications_enabled';
 
   // ── Dark Mode ─────────────────────────────────────────────
 
@@ -68,6 +71,25 @@ class PrefsService {
   String? get savedEmail => _prefs.getString(_keyUserEmail);
   String? get savedName => _prefs.getString(_keyUserName);
   String? get savedAuthToken => _prefs.getString(_keyAuthToken);
+  String? get savedPhotoUrl => _prefs.getString(_keyUserPhoto);
+
+  bool get locationEnabled => _prefs.getBool(_keyLocationEnabled) ?? true;
+  bool get pushNotificationsEnabled =>
+      _prefs.getBool(_keyPushNotificationsEnabled) ?? true;
+
+  Future<void> setProfilePhotoUrl(String? url) async {
+    if (url == null || url.trim().isEmpty) {
+      await _prefs.remove(_keyUserPhoto);
+      return;
+    }
+    await _prefs.setString(_keyUserPhoto, url.trim());
+  }
+
+  Future<void> setLocationEnabled(bool value) =>
+      _prefs.setBool(_keyLocationEnabled, value);
+
+  Future<void> setPushNotificationsEnabled(bool value) =>
+      _prefs.setBool(_keyPushNotificationsEnabled, value);
 
   /// Clear session on logout — removes all saved login data
   Future<void> clearSession() async {
@@ -75,6 +97,7 @@ class PrefsService {
     await _prefs.remove(_keyUserEmail);
     await _prefs.remove(_keyUserName);
     await _prefs.remove(_keyAuthToken);
+    await _prefs.remove(_keyUserPhoto);
   }
 
   /// Clear ALL preferences (used in testing or full reset)

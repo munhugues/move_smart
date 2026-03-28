@@ -68,6 +68,18 @@ class FirebaseAuthRemoteDataSource implements AuthRemoteDataSource {
   @override
   Future<UserModel> signInWithGoogle() async {
     try {
+      // On web, use Firebase popup flow directly.
+      if (kIsWeb) {
+        final provider = GoogleAuthProvider();
+        final userCredential = await _auth.signInWithPopup(provider);
+        final webUser = userCredential.user;
+        if (webUser == null) {
+          throw Exception('Google sign-in failed. Please try again.');
+        }
+        return _buildAndSyncUser(webUser);
+      }
+
+      // On Android/iOS/macOS, use google_sign_in plugin.
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
         throw Exception('Google sign-in was cancelled.');
@@ -88,8 +100,8 @@ class FirebaseAuthRemoteDataSource implements AuthRemoteDataSource {
       return _buildAndSyncUser(user);
     } on FirebaseAuthException catch (e) {
       throw Exception(_authErrorMessage(e));
-    } catch (_) {
-      throw Exception('Google sign-in was cancelled or failed.');
+    } catch (e) {
+      throw Exception(e.toString().replaceFirst('Exception: ', ''));
     }
   }
 
