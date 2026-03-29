@@ -4,7 +4,7 @@ import '../providers/app_providers.dart';
 import 'home_screen.dart';
 import 'search_screen.dart';
 import 'my_trips_screen.dart';
-import 'settings_screen.dart';
+import '../features/settings/presentation/pages/settings_page.dart';
 
 // The bottom nav bar that holds all 4 main screens
 class MainNav extends ConsumerWidget {
@@ -15,7 +15,7 @@ class MainNav extends ConsumerWidget {
     const HomeScreen(),
     const SearchScreen(),
     const MyTripsScreen(),
-    const SettingsScreen(),
+    const SettingsPage(),
   ];
 
   @override
